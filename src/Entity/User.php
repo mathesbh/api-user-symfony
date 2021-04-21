@@ -61,5 +61,9 @@ class User
     $this->lastName = $lastName;
   }
 
+  public function getCreatedAt(): \DateTime
+  {
+    return $this->createdAt;
+  }
 
 }
