@@ -31,6 +31,7 @@ class GetUserAction
       'id' => $user->getId(),
       'firstName' => $user->getFirstName(),
       'lastName' => $user->getLastName(),
+      'email' => $user->getEmail(),
       'createdAt' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
       ]);
   }

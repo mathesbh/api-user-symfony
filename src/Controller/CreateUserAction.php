@@ -23,6 +23,7 @@ class CreateUserAction
     $user = new User();
     $user->setFirstName($requestContent['firstName']);
     $user->setLastName($requestContent['lastName']);
+    $user->setEmail($requestContent['email']);
 
     $this->entityManager->persist($user);
     $this->entityManager->flush();
