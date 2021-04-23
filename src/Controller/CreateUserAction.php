@@ -8,22 +8,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class CreateUserAction
 {
-  public function __construct(private EntityManagerInterface $entityManager)
+  public function __construct(private EntityManagerInterface $entityManager, private SerializerInterface $serializer)
   {
   }
 
   #[Route("/users", methods:["POST"])]
   public function __invoke(Request $request): Response
   {
-    $requestContent = json_decode($request->getContent(), true);
-
-    $user = new User();
-    $user->setFirstName($requestContent['firstName']);
-    $user->setLastName($requestContent['lastName']);
-    $user->setEmail($requestContent['email']);
+    $user = $this->serializer->deserialize($request->getContent(), User::class, format: 'json');
 
     $this->entityManager->persist($user);
     $this->entityManager->flush();
