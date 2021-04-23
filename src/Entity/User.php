@@ -27,6 +27,11 @@ class User
   private string $lastName;
 
   /**
+   * @ORM\Column(type="string")
+   */
+  private string $email;
+
+  /**
    * @ORM\Column(type="datetime")
    */
   private \DateTime $createdAt;
@@ -59,6 +64,16 @@ class User
   public function setLastName(string $lastName): void
   {
     $this->lastName = $lastName;
+  }
+
+  public function getEmail(): string
+  {
+    return $this->email;
+  }
+
+  public function setEmail(string $email): void
+  {
+    $this->email = $email;
   }
 
   public function getCreatedAt(): \DateTime
