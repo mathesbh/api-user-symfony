@@ -7,10 +7,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class ListUserAction
 {
-  public function __construct(private EntityManagerInterface $entityManager)
+  public function __construct(private EntityManagerInterface $entityManager, private SerializerInterface $serializer)
   {
     
   }
@@ -21,18 +22,8 @@ class ListUserAction
     $repository = $this->entityManager->getRepository(User::class);
     $users = $repository->findAll();
 
-    $response = [];
+    $response = $this->serializer->serialize($users, format: 'json');
 
-    foreach($users as $user){
-      $response[] = [
-        'id' => $user->getId(),
-        'firstName' => $user->getFirstName(),
-        'lastName' => $user->getLastName(),
-        'email' => $user->getEmail(),
-        'createdAt' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
-      ];
-    }
-
-    return new JsonResponse($response, Response::HTTP_ACCEPTED);
+    return JsonResponse::fromJsonString($response);
   }
 }
