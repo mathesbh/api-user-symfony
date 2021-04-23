@@ -7,10 +7,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class GetUserAction
 {
-  public function __construct(private EntityManagerInterface $entityManager)
+  public function __construct(private EntityManagerInterface $entityManager, private SerializerInterface $serializer)
   {
     
   }
@@ -27,12 +28,6 @@ class GetUserAction
       ], Response::HTTP_NOT_FOUND);
     }
 
-    return new JsonResponse([
-      'id' => $user->getId(),
-      'firstName' => $user->getFirstName(),
-      'lastName' => $user->getLastName(),
-      'email' => $user->getEmail(),
-      'createdAt' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
-      ]);
+    return JsonResponse::fromJsonString($this->serializer->serialize($user, format: 'json'));
   }
 }
