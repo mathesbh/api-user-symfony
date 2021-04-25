@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Address;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -37,6 +38,12 @@ class User
    * @Assert\Length(min=5, minMessage="Email deve ter pelo menos 5 caracteres")
    */
   private string $email;
+
+  /**
+   * @ORM\OneToOne(targetEntity="App\Entity\Address", cascade={"all"})
+   * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="CASCADE")
+   */
+  private Address $address;
 
   /**
    * @ORM\Column(type="datetime")
@@ -88,4 +95,13 @@ class User
     return $this->createdAt;
   }
 
+  public function getAddress(): Address
+  {
+    return $this->address;
+  }
+
+  public function setAddress(Address $address): void
+  {
+    $this->address = $address;
+  }
 }
