@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
@@ -18,16 +19,22 @@ class User
 
   /**
    * @ORM\Column(type="string", length=100)
+   * @Assert\NotBlank(message="Primeiro nome é obrigatório")
+   * @Assert\Length(min=3, minMessage="Primeiro nome deve ter pelo menos 3 caracteres", max=100)
    */
   private string $firstName;
 
   /**
    * @ORM\Column(type="string", length=100)
+   * @Assert\NotBlank(message="Sobrenome é obrigatório")
+   * @Assert\Length(min=3, minMessage="Sobrenome deve ter pelo menos 3 caracteres", max=100)
    */
   private string $lastName;
 
   /**
    * @ORM\Column(type="string")
+   * @Assert\NotBlank(message="Email é obrigatório")
+   * @Assert\Length(min=5, minMessage="Email deve ter pelo menos 5 caracteres")
    */
   private string $email;
 
