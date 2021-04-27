@@ -17,7 +17,7 @@ class DeleteUserActionTest extends WebTestCase
     $this->assertSame(Response::HTTP_NO_CONTENT, $statusCode);
   }
 
-  public function test_get_user_should_return_400(): void
+  public function test_delete_user_should_return_400(): void
   {
     $client = static::createClient();
 
