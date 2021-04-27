@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreateUserActionTest extends WebTestCase
 {
-  public function test_create_user(): void
+  public function test_create_user_post(): void
   {
     $client = static::createClient();
 
