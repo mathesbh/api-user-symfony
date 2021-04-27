@@ -2,30 +2,57 @@
 
 namespace App\Test\Controller;
 
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\ToolsException;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class GetUserActionTest extends WebTestCase
 {
+  private EntityManagerInterface $em;
+  private KernelBrowser $client;
+
+  protected function setUp(): void
+  {
+    $this->client = self::createClient();
+
+    $this->em = self::$kernel->getContainer()->get('doctrine')->getManager();
+    $tool = new SchemaTool($this->em);
+
+    $metadata = $this->em->getClassMetadata(User::class);
+    $tool->dropSchema([$metadata]);
+
+    try{
+      $tool->createSchema([$metadata]);
+    }catch(ToolsException $e){
+      $this->fail('Impossível criar schema da entidade User: "'.$e->getMessage().'"');
+    }
+  }
+
   public function test_get_user_should_return_200(): void
   {
-    $client = static::createClient();
+    $user = new User();
+    $user->setFirstName('Teste');
+    $user->setLastName('Funcional');
+    $user->setEmail('email@teste.funcional');
 
-    $client->request(method: 'GET', uri: '/users/1');
+    $this->em->persist($user);
+    $this->em->flush();
 
-    $statusCode = $client->getResponse()->getStatusCode();
+    $this->client->request(method: 'GET', uri: '/users/1');
+
+    $statusCode = $this->client->getResponse()->getStatusCode();
     $this->assertSame(Response::HTTP_OK, $statusCode);
   }
 
   public function test_get_user_should_return_400(): void
   {
-    $client = static::createClient();
+    $this->client->request(method: 'GET', uri: '/users/999');
 
-    $client->request(method: 'GET', uri: '/users/999');
-
-    $statusCode = $client->getResponse()->getStatusCode();
+    $statusCode = $this->client->getResponse()->getStatusCode();
     $this->assertSame(Response::HTTP_NOT_FOUND, $statusCode);
   }
-
-  
 }

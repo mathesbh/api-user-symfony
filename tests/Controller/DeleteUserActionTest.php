@@ -11,7 +11,7 @@ class DeleteUserActionTest extends WebTestCase
   {
     $client = static::createClient();
 
-    $client->request(method: 'DELETE', uri: '/users/2');
+    $client->request(method: 'DELETE', uri: '/users/1');
 
     $statusCode = $client->getResponse()->getStatusCode();
     $this->assertSame(Response::HTTP_NO_CONTENT, $statusCode);
