@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
@@ -24,11 +25,15 @@ class Phone
 
   /**
    * @ORM\Column(type="integer")
+   *  @Assert\NotBlank(message="Código de área é obrigatório")
+   * @Assert\Length(min=2, minMessage="Código de área  deve ter pelo menos 2 caracteres")
    */
   private int $areaCode;
 
   /**
    * @ORM\Column(type="string")
+   * @Assert\NotBlank(message="Número de telefone é obrigatório")
+   * @Assert\Length(min=9, minMessage="Número de telefone deve ter pelo menos 9 caracteres")
    */
   private String $phoneNumber;
 
